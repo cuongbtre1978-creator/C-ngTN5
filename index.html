@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Thí nghiệm: Tính tan của cellulose trong nước Schweizer</title>
+<style>
+:root{--bg:#0f172a;--panel:rgba(30,41,59,.88);--blue:#3b82f6;--deep:#063a9b;--ok:#10b981}
+*{box-sizing:border-box}body{margin:0;height:100vh;overflow:hidden;font-family:Segoe UI,Arial,sans-serif;color:#f8fafc;background:radial-gradient(circle,#1e1b4b,#020617)}
+#app{display:flex;height:100%}.panel{width:390px;padding:18px;background:var(--panel);overflow:auto;border-right:1px solid #ffffff22;z-index:20}
+h1{font-size:19px;text-align:center;color:#60a5fa}.step{background:#0005;border-left:4px solid var(--blue);padding:13px;margin:10px 0;border-radius:8px;line-height:1.42}.inactive{opacity:.32;pointer-events:none}.done{border-left-color:var(--ok)}
+.work{position:relative;flex:1;min-width:650px}.shelf{position:absolute;top:18px;right:18px;display:flex;gap:12px;padding:13px;background:#0007;border-radius:14px;z-index:30}
+.chem{width:78px;text-align:center;font-size:12px;cursor:pointer;transition:.2s}.chem:hover{transform:translateY(-4px)}.chem.disabled{opacity:.28;pointer-events:none;transform:none}
+.bottle{width:40px;height:62px;margin:auto;border:2px solid #ffffff88;border-radius:9px;background:linear-gradient(transparent 30%,#ffffff25 30%);position:relative}.bottle:before{content:"";position:absolute;top:-9px;left:10px;width:16px;height:9px;background:#cbd5e1}.cu{background:linear-gradient(transparent 30%,#2696eccc 30%)}.nh3{background:linear-gradient(transparent 30%,#dff7ff33 30%)}
+#desk{position:absolute;left:3%;right:3%;bottom:-50px;height:160px;background:linear-gradient(#334155,#0f172a);border-top:2px solid #64748b;border-radius:50%/20px}
+#beaker{position:absolute;left:50%;transform:translateX(-50%);bottom:75px;width:230px;height:260px;border:5px solid #ffffff77;border-top:2px solid #ffffff44;border-radius:5px 5px 40px 40px;overflow:hidden;z-index:5;background:#ffffff08}
+#liquid{position:absolute;bottom:0;width:100%;height:0;background:#2696eccc;transition:all 1.6s ease}
+#precip{position:absolute;bottom:0;width:100%;height:0;opacity:0;background:repeating-radial-gradient(ellipse at 50% 100%,#55b9f3 0 8px,#8ed4fa 9px 16px,#359bd8 17px 23px);filter:blur(1px);transition:1.4s}
+#cotton{position:absolute;left:67px;bottom:112px;width:95px;height:65px;opacity:0;transition:3s;z-index:8}.puff{position:absolute;background:#fff;border-radius:50%;box-shadow:0 0 8px #fff8}
+#stir{position:absolute;left:65%;top:-40px;width:9px;height:310px;border-radius:6px;background:linear-gradient(90deg,#fff8,#94a3b8aa,#fff8);transform:rotate(8deg);transform-origin:bottom;display:none;z-index:10}
+.stirring{display:block!important;animation:stir .55s infinite alternate}@keyframes stir{to{transform:rotate(-9deg) translateX(-25px)}}
+#label{position:absolute;left:50%;transform:translateX(-50%);bottom:35px;font-weight:700;color:#dbeafe;text-align:center;z-index:12;text-shadow:0 1px 4px #000}
+#status{position:absolute;left:25px;bottom:18px;font-size:17px;color:#cbd5e1}
+button{background:#3b82f6;color:white;border:0;border-radius:7px;padding:9px 14px;font-weight:700;cursor:pointer;margin-top:8px}
+#intro{position:fixed;inset:0;background:#0f172af5;display:flex;align-items:center;justify-content:center;z-index:100}.card{max-width:600px;background:#1e293b;border:1px solid #3b82f6;border-radius:16px;padding:28px;line-height:1.5}.card h2{color:#60a5fa}
+.quiz{display:none;margin-top:10px}.quiz button{display:block;width:100%;text-align:left;background:#ffffff10;border:1px solid #ffffff22}.explain{display:none;margin-top:10px;padding:10px;background:#3b82f622;border-left:3px solid #60a5fa}
+@media(max-width:850px){
+html,body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto;-webkit-text-size-adjust:100%}
+body{min-height:100dvh}
+#app{display:flex;flex-direction:column;height:auto;min-height:100dvh;overflow:visible}
+.panel{width:100%;height:auto;max-height:none;overflow:visible;border-right:0;border-bottom:1px solid #ffffff22;padding:14px}
+.work{width:100%;min-width:0;min-height:620px;height:620px;overflow:hidden;flex:none}
+.shelf{position:relative;top:auto;right:auto;margin:12px;max-width:none;display:grid;grid-template-columns:repeat(5,minmax(58px,1fr));gap:7px;padding:10px;transform:none}
+.chem{width:auto;min-width:0;font-size:10px;touch-action:manipulation}
+.bottle{width:36px;height:54px}
+#beaker{left:50%;transform:translateX(-50%);bottom:105px;width:190px;height:230px}
+#desk{left:0;right:0;bottom:-40px;width:100%}
+#status{left:12px;right:12px;bottom:18px;font-size:15px;line-height:1.35}
+button{min-height:44px;font-size:15px;touch-action:manipulation}
+.step{font-size:14px}
+.card{width:calc(100% - 28px);max-height:90dvh;overflow-y:auto;padding:20px}
+#intro{position:fixed;min-height:100dvh}
+}
+@media(max-width:520px){
+.shelf{grid-template-columns:repeat(3,1fr)}
+.work{height:680px;min-height:680px}
+#beaker{bottom:115px;width:180px;height:225px}
+h1{font-size:17px}.panel{padding:11px}.step{padding:11px;margin:8px 0}
+}
+@supports(padding:max(0px)){
+.panel{padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}
+.work{padding-bottom:env(safe-area-inset-bottom)}
+}
+</style>
+</head>
+<body>
+<div id="intro"><div class="card"><h2>PHÒNG THÍ NGHIỆM ẢO</h2><h3>Tính tan của cellulose trong nước Schweizer</h3>
+<p><b>Mục tiêu:</b> Điều chế nước Schweizer và quan sát khả năng hòa tan cellulose.</p>
+<p><b>Nhiệm vụ:</b> Thực hiện đúng trình tự CuSO₄ → NaOH → lọc kết tủa → NH₃ đặc → thêm bông → nước Schweizer và khuấy.</p>
+<button type="button" onclick="startLab()">Bắt đầu thực hành</button></div></div>
+
+<div id="app"><aside class="panel"><h1>SỔ TAY THÍ NGHIỆM</h1>
+<div id="s1" class="step"><b>Bước 1: Tạo kết tủa Cu(OH)₂</b><br>Cho khoảng 50 mL dung dịch CuSO₄ 1 M vào cốc. Thêm 20 mL NaOH 20%, khuấy đều.</div>
+<div id="s2" class="step inactive"><b>Bước 2: Điều chế nước Schweizer</b><br>Lọc tách kết tủa. Cho kết tủa vào cốc, thêm khoảng 50 mL NH₃ đặc, khuấy đều đến khi kết tủa tan hết.</div>
+<div id="s3" class="step inactive"><b>Bước 3: Hòa tan cellulose</b><br>Thêm một nhúm bông vào khoảng 30 mL nước Schweizer và khuấy đều khoảng 3 phút.</div>
+<div id="quiz" class="step inactive"><b>Quan sát</b><div class="quiz" id="q">
+<button onclick="answer(0)">Bông không tan, dung dịch không đổi màu</button>
+<button onclick="answer(1)">Bông tan dần, tạo dung dịch keo nhớt đồng nhất màu xanh đậm</button>
+<button onclick="answer(2)">Xuất hiện kết tủa đỏ gạch</button></div>
+<div id="exp" class="explain"><b>Chính xác.</b> Cellulose không tan trong nước và nhiều dung môi thông thường. Nước Schweizer (phức đồng(II)–amonia) tương tác với các nhóm hydroxyl của cellulose, làm cellulose hòa tan và tạo hệ keo nhớt màu xanh đậm. Hiện tượng này là cơ sở của quy trình tơ đồng–amonia.</div></div>
+<div id="final" class="step inactive"><b>Hoàn thành thí nghiệm</b><br><b>Hiện tượng:</b> Nhúm bông từ từ tan hoàn toàn, tạo dung dịch keo nhớt đồng nhất màu xanh đậm.<br><br><b>Giải thích:</b> Phức đồng(II)–amonia trong nước Schweizer tạo tương tác/phức với cellulose, giúp phá vỡ mạng liên kết giữa các mạch cellulose và làm polymer hòa tan.<br><button type="button" onclick="location.reload()">Thực hiện lại</button></div>
+</aside>
+
+<main class="work" aria-label="Khu vực mô phỏng thí nghiệm">
+<div class="shelf" aria-label="Kệ hóa chất">
+<div id="cu" class="chem" onclick="add('cu')"><div class="bottle cu"></div>CuSO₄ 1 M</div>
+<div id="naoh" class="chem disabled" onclick="add('naoh')"><div class="bottle"></div>NaOH 20%</div>
+<div id="filter" class="chem disabled" onclick="add('filter')"><div class="bottle" style="background:#f8fafc99"></div>Giấy lọc</div>
+<div id="nh3" class="chem disabled" onclick="add('nh3')"><div class="bottle nh3"></div>NH₃ đặc</div>
+<div id="cellulose" class="chem disabled" onclick="add('cellulose')"><div class="bottle" style="background:white"></div>Cellulose</div>
+</div>
+<div id="desk"></div>
+<div id="beaker"><div id="liquid"></div><div id="precip"></div><div id="cotton"></div><div id="stir"></div><div id="label"></div></div>
+<div id="status">Chọn dung dịch CuSO₄ 1 M để bắt đầu.</div>
+</main></div>
+
+<script>
+let state=0;const $=id=>document.getElementById(id);
+function startLab(){$('intro').style.display='none';makeCotton()}
+function makeCotton(){for(let i=0;i<16;i++){let p=document.createElement('i');p.className='puff';p.style.left=Math.random()*58+'px';p.style.top=Math.random()*35+'px';p.style.width=28+Math.random()*38+'px';p.style.height=18+Math.random()*28+'px';$('cotton').appendChild(p)}}
+function enable(id){$(id).classList.remove('disabled')}function disable(id){$(id).classList.add('disabled')}
+function next(a,b){$(a).classList.add('inactive','done');$(b).classList.remove('inactive')}
+function stir(ms,cb){$('stir').className='stirring';setTimeout(()=>{$('stir').className='';if(cb)cb()},ms)}
+function add(x){
+ if(x==='cu'&&state===0){disable('cu');$('liquid').style.height='43%';$('liquid').style.background='#2696eccc';$('label').textContent='CuSO₄ 1 M';enable('naoh');state=1;$('status').textContent='Đã cho CuSO₄. Tiếp tục thêm NaOH 20%.'}
+ else if(x==='naoh'&&state===1){disable('naoh');$('liquid').style.height='58%';$('status').textContent='Đang khuấy... Cu(OH)₂ màu xanh lam xuất hiện.';stir(1800,()=>{$('precip').style.height='45%';$('precip').style.opacity='1';$('label').textContent='Kết tủa Cu(OH)₂ màu xanh lam';enable('filter');state=2})}
+ else if(x==='filter'&&state===2){disable('filter');$('status').textContent='Đang lọc tách kết tủa Cu(OH)₂...';setTimeout(()=>{$('liquid').style.height='0';$('precip').style.height='35%';$('label').textContent='Cu(OH)₂ đã lọc';next('s1','s2');enable('nh3');state=3;$('status').textContent='Cho NH₃ đặc vào kết tủa và khuấy.'},1800)}
+ else if(x==='nh3'&&state===3){disable('nh3');$('liquid').style.height='55%';$('liquid').style.background='#1b69c9';$('status').textContent='Đang khuấy với NH₃ đặc...';stir(2300,()=>{$('precip').style.opacity='0';$('precip').style.height='0';$('liquid').style.background='linear-gradient(90deg,#06368f,#0751c4,#062f85)';$('liquid').style.boxShadow='inset 0 0 28px #020b3f';$('label').textContent='NƯỚC SCHWEIZER – XANH ĐẬM';next('s2','s3');enable('cellulose');state=4;$('status').textContent='Kết tủa đã tan hết. Nước Schweizer đã tạo thành.'})}
+ else if(x==='cellulose'&&state===4){disable('cellulose');$('cotton').style.opacity='1';$('status').textContent='Đã thêm nhúm bông. Bắt đầu khuấy khoảng 3 phút (mô phỏng)...';stir(900,()=>{dissolveCotton()});state=5}
+}
+function dissolveCotton(){
+ $('cotton').style.bottom='45px';$('cotton').style.transform='scale(.55)';$('cotton').style.filter='blur(3px)';$('cotton').style.opacity='.42';
+ $('liquid').style.background='linear-gradient(90deg,#03266f,#063fb0,#031e62)';$('liquid').style.filter='saturate(1.25)';
+ stir(2400,()=>{$('cotton').style.opacity='0';$('cotton').style.transform='scale(.08)';$('liquid').style.background='linear-gradient(90deg,#021d63,#073da2,#021750)';$('liquid').style.boxShadow='inset 0 0 35px #01072d';$('label').textContent='DUNG DỊCH KEO NHỚT XANH ĐẬM';next('s3','quiz');$('q').style.display='block';$('status').textContent='Bông đã tan hoàn toàn. Hãy chọn mô tả hiện tượng.'})
+}
+function answer(i){
+ let bs=$('q').querySelectorAll('button');bs.forEach((b,k)=>{b.disabled=true;b.style.background=k===1?'#10b981':(k===i?'#ef4444':'#ffffff10')});
+ if(i===1){$('exp').style.display='block';setTimeout(()=>{next('quiz','final');$('status').textContent='Hoàn thành: cellulose tan trong nước Schweizer tạo dung dịch keo nhớt xanh đậm.'},1800)}
+ else setTimeout(()=>{bs.forEach(b=>{b.disabled=false;b.style.background='#ffffff10'})},1200)
+}
+</script>
+</body></html>
